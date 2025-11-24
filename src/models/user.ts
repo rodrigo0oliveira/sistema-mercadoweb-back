@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { INTEGER } from "sequelize";
 
 const userSchema = new mongoose.Schema({
     email:{
@@ -17,7 +16,7 @@ const userSchema = new mongoose.Schema({
     role:{
         type:String,
         enum: [,'admin','funcionario'],
-        default : 'usuario'
+        default : 'funcionario'
     },
     active:{
         type:Boolean,
@@ -27,7 +26,9 @@ const userSchema = new mongoose.Schema({
         type:Number,
     },
     cpf:{
-        type:String
+        type:String,
+        required:[true,"Cpf é obrigatório"],
+        unique:[true,"Cpf já cadastrado!"]
     }
 
 },{timestamps:true})

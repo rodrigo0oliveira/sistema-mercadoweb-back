@@ -1,22 +1,18 @@
 import { NextFunction, Request, Response } from "express";
-import User from "../../models/user";
+import { createToken, createUser, isPasswordMatch, verifyEmailAndPassword, verifyIfEmailExists } from "../../services/auth/auth.service";
 
 
-const register = (req:Request,res:Response,next:NextFunction) => {
+
+const register = async (req:Request,res:Response,next:NextFunction) => {
     try{
     const {cpf,email,password,idade} = req.body;
-    const newUser = new User({email,cpf,password,idade});
-
-    newUser.save()
-    .then((user)=>{
-    res.status(201).json({message:"User created successfully",data:{
-        email:user.email,
-        id:user.id
-    }})
-    })
-    .catch((err)=>{
-    res.status(400).json({message:err.message})
-    });
+    
+    const newUser = await createUser(cpf,password,email,idade);
+    
+    return res.status(201).send({message:"Usuário criado com sucesso!",userInfo:{
+        id:newUser.id
+    }});
+    
 
     }catch(err:any){
         throw new Error(err.message)
@@ -24,6 +20,29 @@ const register = (req:Request,res:Response,next:NextFunction) => {
 }
 
 
+const login = async (req:Request,res:Response,next:NextFunction) =>{
+    try {
+        const {email,password} = req.body;
+
+        const emailExists = await verifyIfEmailExists(email);
+        const matchPassword = await isPasswordMatch(email,password);
+
+        verifyEmailAndPassword(emailExists,matchPassword);
+
+        const token = await createToken(email);
+
+        res.status(200).json({
+            message:'Login realizado com sucesso',
+            acessToken:token
+        });
+        
+    } catch (error:any) {
+        throw new Error(error.message);
+    }
+}
+
+
 export {
-    register
+    register,
+    login
 };
