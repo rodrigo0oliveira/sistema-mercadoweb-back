@@ -7,8 +7,6 @@ function authorizeRoles(allowedRoles:Role []){
             if(!req.userInfo){
                 throw new Error("Autenticação não fornecida!")
             }
-
-            console.log(allowedRoles);
             
 
             if(!allowedRoles.includes(req.userInfo.role)){

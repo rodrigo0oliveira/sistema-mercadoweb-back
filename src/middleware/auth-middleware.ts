@@ -12,7 +12,6 @@ const authMiddleware = (req:Request,res:Response,next:NextFunction) =>{
             throw new Error('Autenticação precisa ser fornecida!');
         }
         const decodedToken = jwt.verify(token,process.env.JWT_SECRET_KEY as string);
-        console.log(decodedToken);
 
         if(!decodedToken){
             throw new Error("Autenticação invalida");
