@@ -5,9 +5,9 @@ import { createToken, createUser, isPasswordMatch, verifyEmailAndPassword, verif
 
 const register = async (req:Request,res:Response,next:NextFunction) => {
     try{
-    const {cpf,email,password,idade} = req.body;
+    const {name,cpf,email,password,age} = req.body;
     
-    const newUser = await createUser(cpf,password,email,idade);
+    const newUser = await createUser(name,cpf,password,email,age);
     
     return res.status(201).send({message:"Usuário criado com sucesso!",userInfo:{
         id:newUser.id

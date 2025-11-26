@@ -10,12 +10,13 @@ async function verifyIfEmailExists(email:string) {
     return false;
 }
 
-async function createUser(cpf:string,password:string,email:string,idade:string) {
+async function createUser(name:string,cpf:string,password:string,email:string,age?: number) {
     const hashedPassword = await encriptPassword(password);
 
     const newUser = new User({
+        name:name,
         cpf:cpf,
-        idade:idade,
+        age:age,
         email:email,
         password:hashedPassword,
     });
