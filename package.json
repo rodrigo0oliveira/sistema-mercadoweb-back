@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "npx nodemon --exec 'ts-node --files' server.ts --watch 'src/' --watch 'server.ts' -e ts",
+    "dev": "npx nodemon --exec \"ts-node --files\" server.ts --watch src --watch server.ts -e ts",
     "compile": "npx tsc",
     "start": "node ./dist/server.js"
   },
