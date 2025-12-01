@@ -1,36 +1,26 @@
-import Sale from "../../../models/Sale";
+import ProductModel from "../../../models/Products";
 
-const getAll = async () => {
-  return Sale.find()
-    .populate("user", "name email")
-    .sort({ createdAt: -1 })
-    .lean();
-};
+class PromotionService {
+  async applyPromo(productId: string, discount: number) {
+    const product = await ProductModel.findById(productId);
+    if (!product) throw new Error("Produto não encontrado");
 
-const getById = async (id: string) => {
-  return Sale.findById(id)
-    .populate("user", "name email")
-    .lean();
-};
+    const promoPrice = product.price - (product.price * discount) / 100;
+    product.promoPrice = promoPrice;
 
-const create = async (payload: any) => {
-  const quantidade = Number(payload.quantidade ?? 1);
-  const valorUnitario = Number(payload.valorUnitario ?? 0);
-  const total = parseFloat((quantidade * valorUnitario).toFixed(2));
+    await product.save();
+    return product;
+  }
 
-  const sale = await Sale.create({
-    ...payload,
-    quantidade,
-    valorUnitario,
-    total,
-  });
+  async removePromo(productId: string) {
+    const product = await ProductModel.findById(productId);
+    if (!product) throw new Error("Produto não encontrado");
 
-  return sale;
-};
+    product.promoPrice = 0;
 
-const remove = async (id: string) => {
-  const r = await Sale.findByIdAndDelete(id);
-  return !!r;
-};
+    await product.save();
+    return product;
+  }
+}
 
-export default { getAll, getById, create, remove };
+export default new PromotionService();
