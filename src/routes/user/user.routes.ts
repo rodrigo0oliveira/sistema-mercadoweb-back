@@ -16,11 +16,11 @@ const requireAdmin = (req: Request & { userInfo?: any }, res: Response, next: Ne
   next();
 };
 
-// listar todos os usuários — só admin
-router.get("/", authMiddleware, requireAdmin, UserController.getAll.bind(UserController));
+// listar todos os usuários
+router.get("/", authMiddleware, UserController.getAll.bind(UserController));
 
 // buscar 1 usuário pelo id — usuário autenticado (ou admin)
-router.get("/:id", authMiddleware, UserController.getById.bind(UserController));
+router.get("/:id", UserController.getById.bind(UserController));
 
 // criar usuário — deixei pública (pode ser usada na tela de cadastro)
 // se quiser tornar só admin, adicione authMiddleware + requireAdmin aqui
